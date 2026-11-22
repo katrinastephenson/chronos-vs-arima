@@ -58,8 +58,6 @@
   .nav { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 50; max-width: calc(100% - 24px); display: flex; gap: 2px; align-items: center; padding: 6px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 86%, transparent); backdrop-filter: blur(14px); border: 1px solid var(--line-ink); overflow-x: auto; scrollbar-width: none; }
   .nav a, .nav button { white-space: nowrap; padding: 7px 11px; border-radius: 999px; color: var(--on-ink-soft); text-decoration: none; font-size: .8rem; font-weight: 600; border: 0; background: none; transition: background var(--fast), color var(--fast); }
   .nav a:hover, .nav a.active { background: var(--accent-2); color: var(--ink); }
-  .nav button { border: 1px solid var(--line-ink); color: var(--on-ink); margin-left: 4px; }
-  .nav button[aria-pressed="true"] { background: var(--accent-3); color: var(--ink); }
   .dots { position: fixed; right: 16px; top: 50%; transform: translateY(-50%); z-index: 40; display: grid; gap: 9px; }
   .dots a { width: 11px; height: 11px; border-radius: 50%; background: rgb(127 135 170 / .45); transition: transform var(--fast), background var(--fast); }
   .dots a.active { background: var(--accent-3); transform: scale(1.35); }
@@ -256,32 +254,18 @@
   .limits h3 { color: var(--accent-2); }
   @media (max-width: 720px) { .finals { grid-template-columns: 1fr; } }
 
+  /* ===== 11 references ===== */
+  .refs { font-size: .92rem; columns: 2; column-gap: 2.5rem; }
+  .refs h3 { color: var(--accent); margin-top: 0; }
+  .refs ol { padding-left: 1.6em; margin-bottom: 1.1rem; break-inside: avoid; }
+  .refs li { margin-bottom: .5em; break-inside: avoid; }
+  .refs h3 { break-after: avoid; }
+  .refs code { font-size: .9em; background: var(--paper); padding: .1em .3em; border-radius: 5px; }
+  @media (max-width: 860px) { .refs { columns: 1; } }
+
   /* ===== Reveal ===== */
   .js .reveal { opacity: 0; transform: translateY(22px); transition: opacity var(--slow) var(--ease), transform var(--slow) var(--ease); }
   .js .reveal.in { opacity: 1; transform: none; }
-
-  /* ===== Speaker notes ===== */
-  .notes { display: none; }
-  #notesbar { position: fixed; inset: auto 0 0 0; z-index: 70; background: #120c22; color: var(--on-ink); border-top: 3px solid var(--accent-3); padding: .8rem 1.2rem 1rem; max-height: 38vh; overflow: auto; font-size: 1.02rem; line-height: 1.5; }
-  #notesbar[hidden] { display: none; }
-  #notesbar .nb-head { display: flex; gap: .8rem; align-items: center; justify-content: space-between; font-size: .74rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-3); margin-bottom: .3rem; }
-  #notesbar p { max-width: 110ch; margin: 0 0 .5em; }
-  #hud { position: fixed; left: 14px; bottom: 10px; z-index: 65; font-size: .74rem; color: #8f86b3; background: rgb(18 12 34 / .7); padding: .25rem .6rem; border-radius: 999px; display: none; }
-
-  /* ===== Present mode: one slide per screen ===== */
-  html.present { scroll-snap-type: y mandatory; }
-  body.present { font-size: clamp(14px, 2.15vh, 20px); }
-  body.present section { min-height: 100svh; scroll-snap-align: start; scroll-margin-top: 0; padding-block: 2.2vh 1.6vh; display: flex; align-items: center; }
-  body.present .hero { padding-top: 0; }
-  body.present section > .wrap { width: min(1500px, 100% - 5vw); }
-  body.present .nav, body.present .dots { display: none; }
-  body.present #hud { display: block; }
-  body.present .chapter-head { margin-bottom: 1.6vh; }
-  body.present .chapter-num { font-size: clamp(2.6rem, 9vh, 5rem); }
-  body.present h2 { font-size: clamp(1.5rem, 4.6vh, 2.6rem); max-width: 34ch; }
-  body.present .arena svg.fit { max-height: 56vh; }
-  body.present .viewer img { max-height: 58vh; width: auto; max-width: 100%; margin-inline: auto; }
-  body.present footer { scroll-snap-align: end; }
 
   footer { padding: 2.2rem 0 4rem; background: #120c22; color: var(--on-ink-soft); font-size: .84rem; }
   footer ol { padding-left: 1.4em; } footer li { margin-bottom: .35em; }
@@ -311,8 +295,7 @@
   <a href="#c8">8 Match 2</a>
   <a href="#c9">9 Intervals</a>
   <a href="#c10">10 Verdict</a>
-  <button id="notesBtn" aria-pressed="false" title="Speaker notes (N)">Notes</button>
-  <button id="present" aria-pressed="false" title="Present full screen (P)">Present</button>
+  <a href="#c11">References</a>
 </nav>
 <nav class="dots" aria-label="Slide dots"></nav>
 
@@ -332,9 +315,6 @@
       </div>
       <p class="byline reveal">Katrina Stephenson and [Partner name]</p>
     </div>
-    <aside class="notes">
-      <p><b>Both.</b> Our project is a head-to-head. On one side, ARIMA, the method from this course. On the other, Chronos-2, a pretrained AI forecasting model. Same data, same rules, and we kept score.</p>
-    </aside>
   </section>
 
   <!-- ============ 01 QUESTION ============ -->
@@ -364,10 +344,6 @@
       </div>
       <div class="bigq reveal">Does skipping the work cost accuracy? We tested it on two series a bank forecasts routinely: <em>the 30-year mortgage rate</em> and <em>commercial bank deposits</em>.</div>
     </div>
-    <aside class="notes">
-      <p>ARIMA works, but every series needs an analyst: difference it, choose the orders, estimate, check the residuals. Pretrained forecasting models claim to skip all of that. You hand over the history and get a forecast.</p>
-      <p>Our question: does skipping the work cost accuracy? We tested it on two series a bank forecasts all the time.</p>
-    </aside>
   </section>
 
   <!-- ============ 02 DATA ============ -->
@@ -389,10 +365,6 @@
       </div>
       <p class="note reveal" style="margin-top:.8rem">Shaded: the test period, the last 104 weeks of each series (November 2024 to November 2026). Everything before it is history only.</p>
     </div>
-    <aside class="notes">
-      <p>Both series are weekly and public, from FRED. The mortgage rate is the average rate on new 30-year fixed home loans. Deposits is the total held in accounts at all U.S. commercial banks.</p>
-      <p>We use January 2000 onward. The shaded part is the last 104 weeks, which we held out for testing.</p>
-    </aside>
   </section>
 
   <!-- ============ 03 ARIMA ============ -->
@@ -406,9 +378,9 @@
         <div class="reveal">
           <ol class="steps" id="steps">
             <li>Plot the series. Both needed one difference (d = 1).</li>
-            <li>Read the ACF and PACF of the differences to choose p and q.&#8288;<span class="cite">[2]</span></li>
+            <li>Read the ACF and PACF of the differences to choose p and q.&#8288;<span class="cite">[2,7]</span></li>
             <li>Estimate by maximum likelihood on the history before the first forecast.</li>
-            <li>Check the residuals: ACF and Ljung-Box test.</li>
+            <li>Check the residuals: ACF and Ljung-Box test.&#8288;<span class="cite">[8]</span></li>
             <li>Keep the orders fixed and re-estimate the coefficients at each of the 8 forecast origins.</li>
           </ol>
           <div class="models">
@@ -432,11 +404,6 @@
         </div>
       </div>
     </div>
-    <aside class="notes">
-      <p><b>[Partner].</b> For ARIMA we followed Chapter 3. Both series needed one difference.</p>
-      <p>Mortgage rate: the PACF of the differences pointed to an AR(2), and ARIMA(2,1,0) had the lowest BIC. Deposits: PACF spikes through lag 6 and steady growth, so ARIMA(6,1,0) with drift, about 11 billion dollars a week.</p>
-      <p>Residuals: the short lags are clean, but the Ljung-Box test shows some autocorrelation left at longer lags, and there are a few extreme weeks in 2008 and 2020. We kept the models and we are reporting that.</p>
-    </aside>
   </section>
 
   <!-- ============ 04 CHRONOS ============ -->
@@ -465,11 +432,6 @@
         </div>
       </div>
     </div>
-    <aside class="notes">
-      <p><b>Katrina.</b> Chronos-2 is a forecasting model from Amazon. Two words matter. Pretrained: its 119 million parameters were learned ahead of time, from other time series, real and simulated. Zero-shot: it never trains on our data. We hand it the history and it returns a forecast.</p>
-      <p>It is built like a language model, but it reads numbers, not words.</p>
-      <p>The table lines the two up. ARIMA has 2 or 7 coefficients estimated from our series. Chronos has 119 million, none of them estimated from our series.</p>
-    </aside>
   </section>
 
   <!-- ============ 05 HOW ============ -->
@@ -494,11 +456,6 @@
       <div class="pipe-cap reveal"><span class="n" id="pipeN">1</span><p id="pipeT"></p></div>
       <div class="controls reveal" style="margin-top:.6rem"><button class="btn light" id="pipeReplay">Replay</button><span class="note">Mortgage example: the history before the first forecast, 1,298 weeks. Patch size is from the model configuration.&#8288;<span class="cite">[5]</span></span></div>
     </div>
-    <aside class="notes">
-      <p>Here is what happens inside, in five steps.</p>
-      <p>One: it rescales the history, so a rate near 7 and a dollar series near 18,000 look alike to the model. Two: it cuts the history into 16-week patches. Three: a transformer lets every patch use information from every other patch. Four: for each future week it outputs quantiles. The median is our forecast, and the 10th and 90th give the 80% interval. Five: it converts back to percent or dollars.</p>
-      <p>At no step is anything estimated from our series.</p>
-    </aside>
   </section>
 
   <!-- ============ 06 RULES ============ -->
@@ -524,10 +481,6 @@
         </ul>
       </div>
     </div>
-    <aside class="notes">
-      <p>The rules. Eight rounds per series. In each round both models see everything from 2000 up to the origin, and forecast the next 13 weeks. Then the real values join the history and we go again. That gives 104 scored weeks per series.</p>
-      <p>The benchmark is the naive forecast: the last value, carried forward. A model that cannot beat that is not adding anything.</p>
-    </aside>
   </section>
 
   <!-- ============ 07 MATCH 1 ============ -->
@@ -539,10 +492,6 @@
       </header>
       <div class="cols match reveal" data-match="mortgage30" data-tail="A narrow win: all three forecasts are within 5% of each other."></div>
     </div>
-    <aside class="notes">
-      <p><b>Katrina.</b> Match one, the mortgage rate. Gold dashed is ARIMA, purple is Chronos, white is what actually happened. [Let the eight rounds play.]</p>
-      <p>Chronos wins six rounds to two. But look at the errors: 0.173 against 0.178, and the naive forecast is 0.181. This is close to a three-way tie.</p>
-    </aside>
   </section>
 
   <!-- ============ 08 MATCH 2 ============ -->
@@ -554,10 +503,6 @@
       </header>
       <div class="cols match reveal" data-match="deposits" data-tail=""></div>
     </div>
-    <aside class="notes">
-      <p><b>[Partner].</b> Match two, deposits. [Let the eight rounds play.]</p>
-      <p>ARIMA wins seven rounds to one, with about half the error. Deposits keep growing, and the drift term projects that growth forward. Chronos forecast too low in every one of the 104 weeks.</p>
-    </aside>
   </section>
 
   <!-- ============ 09 INTERVALS ============ -->
@@ -585,10 +530,6 @@
         </div>
       </div>
     </div>
-    <aside class="notes">
-      <p>Accuracy is not the whole story. An 80% interval should contain the truth about 80% of the time. Chronos came in at 81 and 88 percent. ARIMA came in at 92 and 93, so its intervals covered more than they claimed.</p>
-      <p>On the right: every model gets worse the further ahead it forecasts. On deposits, Chronos is already behind at one week ahead.</p>
-    </aside>
   </section>
 
   <!-- ============ 10 VERDICT ============ -->
@@ -615,28 +556,42 @@
         </div>
       </div>
     </div>
-    <aside class="notes">
-      <p><b>Both.</b> Final score: one match each. With no trend, the zero-shot model matched a hand-built ARIMA. With a trend, ARIMA's drift term won clearly.</p>
-      <p>And they are different kinds of work. ARIMA takes effort and can be checked before it forecasts. Chronos takes no effort and can only be judged afterward.</p>
-      <p>Limits: two series, one horizon, eight windows. And Chronos was sensitive to how much history we gave it. Thank you.</p>
-    </aside>
+  </section>
+  <!-- ============ 11 REFERENCES ============ -->
+  <section id="c11" class="band-tint">
+    <div class="wrap">
+      <header class="chapter-head reveal">
+        <span class="chapter-num" aria-hidden="true">11</span>
+        <div><span class="kicker">Sources</span><h2>References</h2></div>
+      </header>
+      <div class="refs reveal">
+        <h3>Chronos-2</h3>
+        <ol>
+          <li value="1">Ansari, A. F., Shchur, O., Küken, J., Auer, A., Han, B., Mercado, P., et al. (2025). Chronos-2: From univariate to universal forecasting. <i>arXiv preprint</i> arXiv:2510.15821. <a href="https://arxiv.org/abs/2510.15821">arxiv.org/abs/2510.15821</a></li>
+          <li value="5">Amazon. <code>amazon/chronos-2</code> pretrained weights and configuration, Hugging Face. Parameter count and patch size as read from the model in our run.</li>
+          <li value="6">Ansari, A. F., Stella, L., Turkmen, C., Zhang, X., Mercado, P., Shen, H., et al. (2024). Chronos: Learning the language of time series. <i>Transactions on Machine Learning Research</i>. <a href="https://arxiv.org/abs/2403.07815">arxiv.org/abs/2403.07815</a></li>
+        </ol>
+        <h3>ARIMA</h3>
+        <ol>
+          <li value="2">Shumway, R. H., and Stoffer, D. S. (2025). <i>Time Series Analysis and Its Applications: With R Examples</i> (5th ed.). Springer. Chapter 3, ARIMA Models. <a href="https://doi.org/10.1007/978-3-031-70584-7">doi.org/10.1007/978-3-031-70584-7</a></li>
+          <li value="7">Box, G. E. P., Jenkins, G. M., Reinsel, G. C., and Ljung, G. M. (2015). <i>Time Series Analysis: Forecasting and Control</i> (5th ed.). Wiley.</li>
+          <li value="8">Ljung, G. M., and Box, G. E. P. (1978). On a measure of lack of fit in time series models. <i>Biometrika</i>, 65(2), 297–303.</li>
+          <li value="9">R Core Team. <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna. Models fitted with <code>arima()</code> in the stats package.</li>
+        </ol>
+        <h3>Data</h3>
+        <ol>
+          <li value="3">Freddie Mac. 30-Year Fixed Rate Mortgage Average in the United States [MORTGAGE30US]. Retrieved from FRED, Federal Reserve Bank of St. Louis, November 2026. <a href="https://fred.stlouisfed.org/series/MORTGAGE30US">fred.stlouisfed.org/series/MORTGAGE30US</a></li>
+          <li value="4">Board of Governors of the Federal Reserve System (US). Deposits, All Commercial Banks [DPSACBW027SBOG]. Retrieved from FRED, Federal Reserve Bank of St. Louis, November 2026. <a href="https://fred.stlouisfed.org/series/DPSACBW027SBOG">fred.stlouisfed.org/series/DPSACBW027SBOG</a></li>
+        </ol>
+      </div>
+    </div>
   </section>
 </main>
 
 <footer><div class="wrap">
-  <h3>References</h3>
-  <ol>
-    <li>Ansari, A. F., Shchur, O., Küken, J., et al. (2025). <i>Chronos-2: From Univariate to Universal Forecasting.</i> arXiv:2510.15821. <a href="https://arxiv.org/abs/2510.15821">arxiv.org/abs/2510.15821</a></li>
-    <li>Shumway, R. H., and Stoffer, D. S. <i>Time Series Analysis and Its Applications: With R Examples</i>, 5th ed. Springer. Chapter 3.</li>
-    <li>Freddie Mac, 30-Year Fixed Rate Mortgage Average in the United States [MORTGAGE30US], retrieved from FRED, Federal Reserve Bank of St. Louis. <a href="https://fred.stlouisfed.org/series/MORTGAGE30US">fred.stlouisfed.org/series/MORTGAGE30US</a></li>
-    <li>Board of Governors of the Federal Reserve System, Deposits, All Commercial Banks [DPSACBW027SBOG], retrieved from FRED, Federal Reserve Bank of St. Louis. <a href="https://fred.stlouisfed.org/series/DPSACBW027SBOG">fred.stlouisfed.org/series/DPSACBW027SBOG</a></li>
-    <li>Amazon, <code>amazon/chronos-2</code> pretrained weights and configuration, Hugging Face. Parameter count and patch size as read from the model in our run.</li>
-  </ol>
-  <p>All results on this page are computed from our own forecast files. Keys: arrows or space to move in Present mode, P present, N speaker notes, R replay the current animation.</p>
+  <p>All results on this page are computed from our own forecast files. Press R to replay the animation in the current section.</p>
 </div></footer>
 
-<div id="notesbar" hidden><div class="nb-head"><span id="nbTitle">Speaker notes</span><button class="btn" id="nbPop">Open in separate window</button></div><div id="nbBody"></div></div>
-<div id="hud" aria-hidden="true"></div>
 
 <script>
 (() => {
@@ -700,8 +655,6 @@
   const setCurrent = sec => {
     current = sec;
     links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + sec.id));
-    $('#hud').textContent = `${sections.indexOf(sec)} / ${sections.length - 1}  ·  N notes  ·  R replay  ·  Esc exit`;
-    showNotes();
     if (!played[sec.id]) { played[sec.id] = true; sec.classList.add('played'); PLAY[sec.id]?.(); }
   };
   const navIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setCurrent(e.target); }), { rootMargin: '-45% 0px -50% 0px' });
@@ -891,48 +844,8 @@
   $('#finals').innerHTML = ['mortgage30', 'deposits'].map((k, i) => { const s = ST[k], w = s.winner, l = w === 'a' ? 'c' : 'a', F = FMT[k];
     return `<div class="final" style="--w: var(--${w === 'a' ? 'arima' : 'chronos'})"><small>Match ${i + 1} · ${F.label}</small><b>${NAME[w]} wins, ${s.wins[w]} rounds to ${s.wins[l]}</b><span>MAE ${F.err(s.mae[w])} against ${F.err(s.mae[l])} ${F.unit}. Relative to naive: ${s.rel[w].toFixed(2)} against ${s.rel[l].toFixed(2)}.</span></div>`; }).join('');
 
-  // ---------- Speaker notes ----------
-  const nb = $('#notesbar'); let pop = null;
-  const noteHTML = () => current.querySelector('.notes')?.innerHTML || '<p>No notes for this slide.</p>';
-  const noteTitle = () => `Notes · slide ${sections.indexOf(current)} · ${(current.querySelector('h2')?.textContent || 'Title').trim()}`;
-  function showNotes() {
-    $('#nbTitle').textContent = noteTitle(); $('#nbBody').innerHTML = noteHTML();
-    if (pop && !pop.closed) { pop.document.getElementById('t').textContent = noteTitle(); pop.document.getElementById('b').innerHTML = noteHTML(); }
-  }
-  const toggleNotes = () => { nb.hidden = !nb.hidden; $('#notesBtn').setAttribute('aria-pressed', !nb.hidden); };
-  $('#notesBtn').addEventListener('click', toggleNotes);
-  $('#nbPop').addEventListener('click', () => {
-    pop = window.open('', 'speakerNotes', 'width=560,height=640'); if (!pop) return;
-    pop.document.open(); pop.document.write('<!DOCTYPE html><title>Speaker notes</title><body style="font:20px/1.5 system-ui,sans-serif;background:#120c22;color:#ecebfb;margin:1.2rem"><div id="t" style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#f0c674;font-weight:700;margin-bottom:.6rem"></div><div id="b"></div></body>'); pop.document.close();
-    nb.hidden = true; $('#notesBtn').setAttribute('aria-pressed', false); showNotes();
-  });
-
-  // ---------- Present mode ----------
-  const pBtn = $('#present');
-  const setPresent = async on => {
-    const keep = current;
-    document.body.classList.toggle('present', on); document.documentElement.classList.toggle('present', on); pBtn.setAttribute('aria-pressed', on);
-    try { on ? await document.documentElement.requestFullscreen() : document.fullscreenElement && await document.exitFullscreen(); } catch {}
-    requestAnimationFrame(() => keep.scrollIntoView({ behavior: 'auto' }));
-  };
-  pBtn.addEventListener('click', () => setPresent(!document.body.classList.contains('present')));
-  document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && document.body.classList.contains('present')) setPresent(false); });
-  addEventListener('keydown', e => {
-    if (e.target.closest('input,textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
-    const k = e.key.toLowerCase();
-    if (k === 'n') return toggleNotes();
-    if (k === 'p') return setPresent(!document.body.classList.contains('present'));
-    if (k === 'r') return PLAY[current.id]?.();
-    if (!document.body.classList.contains('present')) return;
-    const next = ['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key), prev = ['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key);
-    if (!next && !prev) return;
-    e.preventDefault();
-    const i = sections.indexOf(current);
-    sections[Math.min(sections.length - 1, Math.max(0, i + (next ? 1 : -1)))].scrollIntoView({ behavior: 'auto' });
-  });
-
+  addEventListener('keydown', e => { if (e.target.closest('input,textarea') || e.metaKey || e.ctrlKey || e.altKey) return; if (e.key.toLowerCase() === 'r') PLAY[current.id]?.(); });
   sections.forEach(s => navIO.observe(s));
-  showNotes();
 })();
 </script>
 </body>

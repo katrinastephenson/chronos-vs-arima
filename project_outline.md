@@ -139,6 +139,26 @@ To be filled in once both notebooks have run.
 - Answer to the question: one paragraph, based on the results.
 - Next steps: what a fuller study would add, such as more series or other horizons.
 
+## References
+
+Chronos-2
+
+1. Ansari, A. F., Shchur, O., Küken, J., Auer, A., Han, B., Mercado, P., et al. (2025). Chronos-2: From univariate to universal forecasting. arXiv preprint arXiv:2510.15821. https://arxiv.org/abs/2510.15821
+2. Ansari, A. F., Stella, L., Turkmen, C., Zhang, X., Mercado, P., Shen, H., et al. (2024). Chronos: Learning the language of time series. Transactions on Machine Learning Research. https://arxiv.org/abs/2403.07815
+3. Amazon. amazon/chronos-2 pretrained weights and configuration, Hugging Face. Parameter count and patch size as read from the model in our run.
+
+ARIMA
+
+4. Shumway, R. H., and Stoffer, D. S. (2025). Time Series Analysis and Its Applications: With R Examples (5th ed.). Springer. Chapter 3, ARIMA Models. https://doi.org/10.1007/978-3-031-70584-7
+5. Box, G. E. P., Jenkins, G. M., Reinsel, G. C., and Ljung, G. M. (2015). Time Series Analysis: Forecasting and Control (5th ed.). Wiley.
+6. Ljung, G. M., and Box, G. E. P. (1978). On a measure of lack of fit in time series models. Biometrika, 65(2), 297-303.
+7. R Core Team. R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna. Models fitted with arima() in the stats package.
+
+Data
+
+8. Freddie Mac. 30-Year Fixed Rate Mortgage Average in the United States [MORTGAGE30US]. Retrieved from FRED, Federal Reserve Bank of St. Louis, November 2026. https://fred.stlouisfed.org/series/MORTGAGE30US
+9. Board of Governors of the Federal Reserve System (US). Deposits, All Commercial Banks [DPSACBW027SBOG]. Retrieved from FRED, Federal Reserve Bank of St. Louis, November 2026. https://fred.stlouisfed.org/series/DPSACBW027SBOG
+
 ## How the work flows
 
 1. Katrina runs the Chronos notebook (chronos_forecasts.ipynb), which produces the forecasts, metrics, and the list of forecast dates in the output folder. Done 2026-11-22.
