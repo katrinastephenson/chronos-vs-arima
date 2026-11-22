@@ -1,0 +1,107 @@
+ARIMA model summary
+Generated: 2026-11-22 12:25:13 
+
+=====================================================================
+Series: mortgage30 | window-1 history: 2000-01-07 to 2024-11-14 | 1298 weeks
+Mean weekly change: -0.0011  SD: 0.0974 
+ACF of differences, lags 1-12:
+ [1]  0.101  0.119  0.019  0.054 -0.026  0.047 -0.113 -0.001  0.004 -0.019
+[11] -0.006 -0.007
+PACF of differences, lags 1-12:
+ [1]  0.101  0.110 -0.003  0.041 -0.037  0.043 -0.118  0.010  0.031 -0.027
+[11]  0.008 -0.013
+Approx. 95% band: +/- 0.056 
+
+Candidate models on window-1 history (sorted by BIC, top 8):
+   p d q     AIC     BIC
+7  2 1 0 -2383.9 -2368.4
+3  0 1 2 -2382.2 -2366.7
+5  1 1 1 -2379.2 -2363.7
+9  2 1 2 -2388.4 -2362.5
+8  2 1 1 -2382.0 -2361.3
+10 3 1 0 -2381.9 -2361.3
+6  1 1 2 -2381.1 -2360.4
+4  1 1 0 -2370.1 -2359.7
+
+Chosen model: ARIMA(2,1,0)
+
+Call:
+arima(x = y, order = order, method = "ML")
+
+Coefficients:
+         ar1     ar2
+      0.0902  0.1102
+s.e.  0.0276  0.0276
+
+sigma^2 estimated as 0.009274:  log likelihood = 1194.97,  aic = -2383.94
+
+Ljung-Box test on residuals:
+  lag        Q      p_value
+1  10 26.25446 0.0009499913
+2  20 32.52825 0.0190222426
+3  30 39.09793 0.0793606717
+
+=====================================================================
+Series: deposits | window-1 history: 2000-01-05 to 2024-11-06 | 1297 weeks
+Mean weekly change: 11.0989  SD: 38.5042 
+ACF of differences, lags 1-12:
+ [1] -0.001  0.150  0.163  0.226  0.020  0.235  0.058  0.041  0.044  0.145
+[11] -0.061  0.105
+PACF of differences, lags 1-12:
+ [1] -0.001  0.150  0.167  0.219 -0.012  0.164  0.006 -0.054 -0.030  0.061
+[11] -0.075  0.046
+Approx. 95% band: +/- 0.056 
+
+Candidate models on window-1 history (sorted by BIC, top 8):
+   p d q     AIC     BIC
+21 6 1 2 12924.8 12976.5
+19 6 1 0 12990.3 13031.7
+20 6 1 1 12992.3 13038.8
+15 4 1 2 13000.6 13041.9
+18 5 1 2 13002.0 13048.5
+17 5 1 1 13010.0 13051.4
+13 4 1 0 13022.1 13053.1
+14 4 1 1 13017.9 13054.1
+
+Chosen model: ARIMA(6,1,0) with drift
+
+Call:
+arima(x = y, order = order, xreg = seq_along(y), method = "ML")
+
+Coefficients:
+          ar1     ar2     ar3     ar4      ar5     ar6  seq_along(y)
+      -0.0578  0.0833  0.1449  0.1988  -0.0030  0.1644       11.1013
+s.e.   0.0274  0.0274  0.0269  0.0270   0.0274  0.0274        2.1282
+
+sigma^2 estimated as 1304:  log likelihood = -6487.17,  aic = 12990.35
+
+Ljung-Box test on residuals:
+  lag         Q      p_value
+1  10  6.679213 1.538430e-01
+2  20 44.124059 5.653374e-05
+3  30 87.255178 4.083463e-09
+
+mortgage30 window 1 (origin 2024-11-14, n = 1298): ARIMA(2,1,0)  coef: ar1=0.0902 ar2=0.1102
+mortgage30 window 2 (origin 2025-02-13, n = 1311): ARIMA(2,1,0)  coef: ar1=0.0913 ar2=0.1086
+mortgage30 window 3 (origin 2025-05-15, n = 1324): ARIMA(2,1,0)  coef: ar1=0.0912 ar2=0.1068
+mortgage30 window 4 (origin 2025-08-14, n = 1337): ARIMA(2,1,0)  coef: ar1=0.0919 ar2=0.1064
+mortgage30 window 5 (origin 2025-11-13, n = 1350): ARIMA(2,1,0)  coef: ar1=0.0934 ar2=0.1053
+mortgage30 window 6 (origin 2026-02-12, n = 1363): ARIMA(2,1,0)  coef: ar1=0.0930 ar2=0.1052
+mortgage30 window 7 (origin 2026-05-14, n = 1376): ARIMA(2,1,0)  coef: ar1=0.0961 ar2=0.1037
+mortgage30 window 8 (origin 2026-08-13, n = 1389): ARIMA(2,1,0)  coef: ar1=0.0957 ar2=0.1044
+
+deposits window 1 (origin 2024-11-06, n = 1297): ARIMA(6,1,0)  coef: ar1=-0.0578 ar2=0.0833 ar3=0.1449 ar4=0.1988 ar5=-0.0030 ar6=0.1644 seq_along(y)=11.1013
+deposits window 2 (origin 2025-02-05, n = 1310): ARIMA(6,1,0)  coef: ar1=-0.0618 ar2=0.0856 ar3=0.1372 ar4=0.2030 ar5=-0.0072 ar6=0.1702 seq_along(y)=11.0524
+deposits window 3 (origin 2025-05-07, n = 1323): ARIMA(6,1,0)  coef: ar1=-0.0622 ar2=0.0853 ar3=0.1358 ar4=0.2038 ar5=-0.0070 ar6=0.1711 seq_along(y)=11.0754
+deposits window 4 (origin 2025-08-06, n = 1336): ARIMA(6,1,0)  coef: ar1=-0.0648 ar2=0.0841 ar3=0.1380 ar4=0.2035 ar5=-0.0067 ar6=0.1713 seq_along(y)=11.1095
+deposits window 5 (origin 2025-11-05, n = 1349): ARIMA(6,1,0)  coef: ar1=-0.0670 ar2=0.0841 ar3=0.1403 ar4=0.2022 ar5=-0.0082 ar6=0.1708 seq_along(y)=11.0944
+deposits window 6 (origin 2026-02-04, n = 1362): ARIMA(6,1,0)  coef: ar1=-0.0725 ar2=0.0849 ar3=0.1388 ar4=0.2041 ar5=-0.0122 ar6=0.1787 seq_along(y)=11.2387
+deposits window 7 (origin 2026-05-06, n = 1375): ARIMA(6,1,0)  coef: ar1=-0.0709 ar2=0.0854 ar3=0.1381 ar4=0.2017 ar5=-0.0082 ar6=0.1802 seq_along(y)=11.4656
+deposits window 8 (origin 2026-08-05, n = 1388): ARIMA(6,1,0)  coef: ar1=-0.0830 ar2=0.0842 ar3=0.1459 ar4=0.1907 ar5=-0.0016 ar6=0.1816 seq_along(y)=11.5602
+
+Accuracy over the 104 test weeks:
+     series model n_errors         MAE        RMSE   rel_MAE coverage80
+   deposits arima      104  67.5914112  87.0589380 0.4928767  0.9326923
+   deposits naive      104 137.1365538 166.1201085 1.0000000         NA
+ mortgage30 arima      104   0.1779397   0.2346854 0.9827791  0.9230769
+ mortgage30 naive      104   0.1810577   0.2380914 1.0000000         NA
