@@ -90,7 +90,7 @@ Chronos-2 (Katrina)
 - Model: amazon/chronos-2, a pretrained time series foundation model with about 119 million parameters. Run on a laptop CPU.
 - Zero-shot: no parameter is estimated from our data. At each origin the history is passed in as input and the model returns a forecast.
 - Inside the model: the history is standardized, cut into patches of 16 observations, passed through a transformer, and the model outputs quantiles for each of the 13 future weeks. The forecast is converted back to the original units.
-- Point forecast: the median (50th percentile). 80% interval: 10th to 90th percentile.
+- Point forecast: the median (50th percentile). 80% prediction interval: 10th to 90th percentile.
 - Nothing changes between windows except the length of the history.
 - Notebook: chronos_forecasts.ipynb. Run on 2026-11-22.
 
@@ -100,7 +100,7 @@ ARIMA (partner)
 - Identify the model on the history before the first origin (window 1 history): plot the series, difference if needed, read the ACF and PACF, and choose (p, d, q). Shumway & Stoffer Chapter 3.
 - Check the residuals of the chosen model (residual ACF, Ljung-Box test).
 - At each of the 8 origins, re-estimate the coefficients on the history in the table above and forecast 13 weeks.
-- Point forecast: the ARIMA forecast. 80% interval: forecast plus or minus 1.28 standard errors.
+- Point forecast: the ARIMA forecast. 80% prediction interval: forecast plus or minus 1.28 standard errors.
 - To decide: keep the same (p, d, q) for all 8 windows and only re-estimate the coefficients (simpler), or re-select the orders at each origin.
 - Save the forecasts with the same columns as output/forecasts_chronos.csv: series, model, window, origin, timestamp, h, actual, forecast, lo80, hi80. Here h is the number of weeks ahead (1 to 13).
 
@@ -116,7 +116,7 @@ With error = actual minus forecast, over the 104 test weeks of a series:
 - MAE: the average absolute error, in the units of the series.
 - RMSE: the square root of the average squared error, in the units of the series. Penalizes large misses more than MAE.
 - Relative MAE: the model's MAE divided by the naive MAE. Below 1 means the model beat "no change".
-- 80% coverage: the share of actual values that fell inside the model's 80% interval. A well calibrated interval gives about 0.80.
+- 80% coverage: the share of actual values that fell inside the model's 80% prediction interval. An 80% prediction interval should contain about 80% of them.
 
 ## 4. Findings / Results
 
@@ -124,7 +124,7 @@ To be filled in once both notebooks have run.
 
 - Accuracy table: one row per model per series, with the four metrics.
 - Forecast plots: each model's eight forecasts against the actual values, for each series.
-- Interval comparison: whether each model's 80% intervals were too narrow, too wide, or about right.
+- Interval comparison: whether each model's 80% prediction intervals were too narrow, too wide, or about right.
 - Where they differ: which stretches each model handled well or badly, such as turning points in rates.
 
 ## 5. Discussion
@@ -178,5 +178,5 @@ Data
 | Scale | Original units (percent, $ billions) |
 | Point forecast | Chronos median; ARIMA forecast |
 | Interval | 80% (10th to 90th percentile) |
-| Metrics | MAE, RMSE, MAE relative to naive, 80% interval coverage |
+| Metrics | MAE, RMSE, MAE relative to naive, 80% prediction interval coverage |
 | Baseline | Naive (last value carried forward) |

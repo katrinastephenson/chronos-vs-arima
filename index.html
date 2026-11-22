@@ -301,7 +301,7 @@
   <a href="#c6b">7 ARIMA fit</a>
   <a href="#c7">8 Match 1</a>
   <a href="#c8">9 Match 2</a>
-  <a href="#c9">10 Intervals</a>
+  <a href="#c9">10 Prediction intervals</a>
   <a href="#c10">11 Verdict</a>
   <a href="#c11">References</a>
 </nav>
@@ -399,7 +399,7 @@
             <li><b>&beta;</b>: the drift, the mean weekly change. Zero for a model without drift.</li>
             <li><b>w<sub>t</sub></b>: white noise.</li>
           </ul>
-          <p class="cap">80% interval: the forecast plus or minus 1.28 standard errors.&#8288;<span class="cite">[2]</span></p>
+          <p class="cap">80% prediction interval: the forecast plus or minus 1.28 standard errors.&#8288;<span class="cite">[2]</span></p>
         </div>
       </div>
     </div>
@@ -425,7 +425,7 @@
           <div class="tape-row"><span class="l">This one series</span><span class="m">Learns from</span><span class="r">Other series, before our project began</span></div>
           <div class="tape-row"><span class="l">Difference, choose orders, check residuals</span><span class="m">Analyst work</span><span class="r">None</span></div>
           <div class="tape-row"><span class="l">Re-estimated at every forecast origin</span><span class="m">Fitted to our data</span><span class="r">Never</span></div>
-          <div class="tape-row"><span class="l">Forecast &plusmn; 1.28 standard errors</span><span class="m">80% interval</span><span class="r">Its 10th to 90th predicted percentiles</span></div>
+          <div class="tape-row"><span class="l">Forecast &plusmn; 1.28 standard errors</span><span class="m">80% prediction interval</span><span class="r">Its 10th to 90th predicted percentiles</span></div>
           <div class="tape-row"><span class="l">Yes, with residual diagnostics</span><span class="m">Checkable before forecasting</span><span class="r">No</span></div>
           <p class="note" style="margin:.4rem 0 0; max-width:none">119 million is the count from the <code style="background:rgb(255 255 255/.1);padding:.1em .3em;border-radius:5px">amazon/chronos-2</code> weights in our run;&#8288;<span class="cite">[5]</span> the paper reports 120M.&#8288;<span class="cite">[1]</span></p>
         </div>
@@ -476,7 +476,7 @@
           <li><b>Then the truth is revealed:</b> the 13 actual values join the history for the next round.</li>
           <li><b>8 &times; 13 = 104 scored weeks</b> for each series.</li>
           <li><b>The benchmark:</b> the naive forecast, the last observed value carried forward.</li>
-          <li><b>Scoring:</b> mean absolute error (MAE), MAE relative to naive, and 80% interval coverage. The lower MAE wins the round.</li>
+          <li><b>Scoring:</b> mean absolute error (MAE), MAE relative to naive, and how often the 80% prediction interval contained the actual value. The lower MAE wins the round.</li>
         </ul>
       </div>
     </div>
@@ -546,13 +546,13 @@
     <div class="wrap">
       <header class="chapter-head reveal">
         <span class="chapter-num" aria-hidden="true">10</span>
-        <div><span class="kicker">Beyond the score</span><h2>Whose 80% interval can you trust, and how fast does accuracy fade?</h2></div>
+        <div><span class="kicker">Beyond the score</span><h2>Did the 80% prediction intervals hold, and how fast does accuracy fade?</h2></div>
       </header>
       <div class="cols" id="beyond">
         <div class="arena reveal">
-          <h3>Share of actual values inside the 80% interval</h3>
+          <h3>Share of actual values inside the 80% prediction interval</h3>
           <div id="cov"></div>
-          <p class="cv-key">Dashed line: the 80% target.</p>
+          <p class="cv-key">Dashed line: 80%, the share these intervals are meant to contain. A longer bar is not a better forecast.</p>
           <p class="cap" id="covcap"></p>
         </div>
         <div class="arena reveal">
@@ -749,7 +749,7 @@
     `Standardize the history with its own mean and standard deviation, then apply sinh<sup>−1</sup> to damp extreme values.&#8288;<span class="cite">[1]</span> Mortgage example: <code>(${sc.last.toFixed(2)} − ${sc.mean.toFixed(2)}) / ${sc.sd.toFixed(2)} = ${zv}</code>. After this, a rate near 7 and a dollar series near 18,000 look alike to the model.`,
     `Cut the scaled history into consecutive blocks of 16 weeks, called patches.&#8288;<span class="cite">[1,5]</span> Our ${sc.n.toLocaleString()} weeks become about ${Math.round(sc.n / 16)} patches. Each patch is one input to the network, the way a word is one input to a language model.`,
     `A transformer encoder processes the patches. Its attention layers let each patch use information from every other patch in the history.&#8288;<span class="cite">[1]</span>`,
-    `For each future week the model outputs 21 quantiles directly.&#8288;<span class="cite">[1]</span> We use the 50th percentile as the forecast, and the 10th and 90th as the 80% interval.`,
+    `For each future week the model outputs 21 quantiles directly.&#8288;<span class="cite">[1]</span> We use the 50th percentile as the forecast, and the 10th and 90th as the 80% prediction interval.`,
     `Reverse the scaling to return to percent or dollars.&#8288;<span class="cite">[1]</span> At no step was any parameter estimated from our series.`,
   ];
   const stages = $$('#pipe .stage-btn'); let pipeTok = { dead: false };
@@ -785,7 +785,7 @@
       <div class="arena">
         <div class="controls" style="justify-content:space-between;margin-bottom:.3rem">
           <div class="legend" style="margin:0"><span><i class="lr"></i>Actual</span><span><i class="la"></i>ARIMA forecast</span><span><i class="lc"></i>Chronos-2 forecast</span></div>
-          <div class="controls"><button class="btn" data-act="bands" aria-pressed="false">80% intervals</button><button class="btn" data-act="replay">Replay</button></div>
+          <div class="controls"><button class="btn" data-act="bands" aria-pressed="false">80% prediction intervals</button><button class="btn" data-act="replay">Replay</button></div>
         </div>
         <svg class="fit" viewBox="0 0 860 440" role="img" aria-label="${F.label}: actual values with eight 13-week forecasts from ARIMA and from Chronos-2"></svg>
       </div>
@@ -859,7 +859,7 @@
     const row = (k, m) => `<div class="cv-row"><span class="who">${NAME[m]}</span><div class="cv-track"><div class="cv-fill ${m}" style="--v:${(ST[k].cov[m] * 100).toFixed(1)}"></div><div class="cv-target"></div></div><output>${Math.round(ST[k].cov[m] * 100)}%</output></div>`;
     $('#cov').innerHTML = ['mortgage30', 'deposits'].map(k => `<div class="cv-group">${FMT[k].label}</div>${row(k, 'c')}${row(k, 'a')}`).join('');
     const M = ST.mortgage30, D = ST.deposits;
-    $('#covcap').innerHTML = `<b>Chronos-2 landed closer to 80% on both series.</b> ARIMA covered ${Math.round(M.cov.a * 100)}% and ${Math.round(D.cov.a * 100)}%, more than its intervals claim. Average interval width, mortgage rate: ARIMA ${M.wid.a.toFixed(2)}, Chronos-2 ${M.wid.c.toFixed(2)} points. Deposits: ARIMA $${Math.round(D.wid.a)}B, Chronos-2 $${Math.round(D.wid.c)}B.`;
+    $('#covcap').innerHTML = `<b>An 80% prediction interval should contain about 80% of the actual values.</b> Chronos-2's contained ${Math.round(M.cov.c * 100)}% and ${Math.round(D.cov.c * 100)}%; ARIMA's contained ${Math.round(M.cov.a * 100)}% and ${Math.round(D.cov.a * 100)}%. Containing more than 80% means the interval was wider than it needed to be, not that the forecast was more accurate. Average width, mortgage rate: ARIMA ${M.wid.a.toFixed(2)}, Chronos-2 ${M.wid.c.toFixed(2)} points. Deposits: ARIMA $${Math.round(D.wid.a)}B, Chronos-2 $${Math.round(D.wid.c)}B.`;
     const svg = $('#hz'), W = 560, H = 250, m = { l: 54, r: 16, t: 10, b: 34 };
     const draw = key => {
       svg.innerHTML = ''; const b = ST[key].byh, hi = Math.max(...b.a, ...b.c, ...b.n) * 1.08, F = FMT[key];
