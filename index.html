@@ -159,6 +159,13 @@
   .viewer .cap { font-size: .9rem; color: var(--text); margin: .6rem .2rem 0; max-width: none; }
   .viewer .controls { margin-bottom: .6rem; justify-content: space-between; }
 
+  .eqcard { padding: 1.3rem 1.5rem; }
+  .eqcard small { font-size: .74rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--arima); }
+  .eqcard .eq { font-family: "Iowan Old Style", Cambria, Georgia, serif; font-style: italic; font-size: clamp(1.5rem, 3vw, 2.2rem); color: #fff; margin: .5rem 0 .9rem; max-width: none; }
+  .eqcard ul { font-size: .93rem; color: var(--on-ink-soft); }
+  .eqcard ul b { color: var(--on-ink); font-weight: 600; }
+  .fitnotes { margin-top: .9rem; font-size: .95rem; }
+
   /* ===== 04 Chronos + tale of the tape ===== */
   .what li { margin-bottom: .65em; }
   .what b { color: var(--on-ink); }
@@ -291,10 +298,11 @@
   <a href="#c4">4 Chronos-2</a>
   <a href="#c5">5 How it works</a>
   <a href="#c6">6 Rules</a>
-  <a href="#c7">7 Match 1</a>
-  <a href="#c8">8 Match 2</a>
-  <a href="#c9">9 Intervals</a>
-  <a href="#c10">10 Verdict</a>
+  <a href="#c6b">7 ARIMA fit</a>
+  <a href="#c7">8 Match 1</a>
+  <a href="#c8">9 Match 2</a>
+  <a href="#c9">10 Intervals</a>
+  <a href="#c10">11 Verdict</a>
   <a href="#c11">References</a>
 </nav>
 <nav class="dots" aria-label="Slide dots"></nav>
@@ -367,40 +375,31 @@
     </div>
   </section>
 
-  <!-- ============ 03 ARIMA ============ -->
+  <!-- ============ 03 ARIMA (method) ============ -->
   <section id="c3">
     <div class="wrap">
       <header class="chapter-head reveal">
         <span class="chapter-num" aria-hidden="true">03</span>
         <div><span class="kicker">In this corner · ARIMA</span><h2>ARIMA: one model for each series, identified by hand</h2></div>
       </header>
-      <div class="cols" style="--cols: 1fr 1.25fr">
-        <div class="reveal">
-          <ol class="steps" id="steps">
-            <li>Plot the series. Both needed one difference (d = 1).</li>
-            <li>Read the ACF and PACF of the differences to choose p and q.&#8288;<span class="cite">[2,7]</span></li>
-            <li>Estimate by maximum likelihood on the history before the first forecast.</li>
-            <li>Check the residuals: ACF and Ljung-Box test.&#8288;<span class="cite">[8]</span></li>
-            <li>Keep the orders fixed and re-estimate the coefficients at each of the 8 forecast origins.</li>
-          </ol>
-          <div class="models">
-            <div class="model"><small>Mortgage rate</small><b>ARIMA(2,1,0)</b>&#981;<sub>1</sub> = 0.090, &#981;<sub>2</sub> = 0.110. Lowest BIC of the candidates tried.</div>
-            <div class="model"><small>Deposits</small><b>ARIMA(6,1,0) + drift</b>Drift = $11.1 billion per week (s.e. 2.1). PACF spikes through lag 6.</div>
-          </div>
-        </div>
-        <div class="card viewer reveal">
-          <div class="controls">
-            <div class="controls" role="group" aria-label="Series">
-              <button class="btn light" data-vs="mortgage30" aria-pressed="true">Mortgage rate</button>
-              <button class="btn light" data-vs="deposits" aria-pressed="false">Deposits</button>
-            </div>
-            <div class="controls" role="group" aria-label="Plot">
-              <button class="btn light" data-vv="res" aria-pressed="true">Residuals</button>
-              <button class="btn light" data-vv="id" aria-pressed="false">ACF and PACF</button>
-            </div>
-          </div>
-          <img id="vimg" alt="">
-          <p class="cap" id="vcap"></p>
+      <div class="cols" style="--cols: 1fr 1fr">
+        <ol class="steps reveal" id="steps">
+          <li>Difference the series until it looks stationary.</li>
+          <li>Read the ACF and PACF of the differences to choose p and q.&#8288;<span class="cite">[2,7]</span></li>
+          <li>Compare candidate orders by BIC and estimate by maximum likelihood.</li>
+          <li>Check the residuals: ACF and the Ljung-Box test.&#8288;<span class="cite">[8]</span></li>
+          <li>Keep the orders fixed and re-estimate the coefficients at each of the 8 forecast origins.</li>
+        </ol>
+        <div class="arena eqcard reveal">
+          <small>The model: ARIMA(p, 1, q) with drift</small>
+          <p class="eq">&#981;(B) (&nabla;x<sub>t</sub> &minus; &beta;) = &theta;(B) w<sub>t</sub></p>
+          <ul>
+            <li><b>&nabla;x<sub>t</sub> = x<sub>t</sub> &minus; x<sub>t&minus;1</sub></b>: the week-to-week change.</li>
+            <li><b>&#981;(B), &theta;(B)</b>: the autoregressive and moving-average polynomials in the backshift operator B, of orders p and q.</li>
+            <li><b>&beta;</b>: the drift, the mean weekly change. Zero for a model without drift.</li>
+            <li><b>w<sub>t</sub></b>: white noise.</li>
+          </ul>
+          <p class="cap">80% interval: the forecast plus or minus 1.28 standard errors.&#8288;<span class="cite">[2]</span></p>
         </div>
       </div>
     </div>
@@ -483,11 +482,48 @@
     </div>
   </section>
 
+  <!-- ============ 07 ARIMA FIT (results) ============ -->
+  <section id="c6b">
+    <div class="wrap">
+      <header class="chapter-head reveal">
+        <span class="chapter-num" aria-hidden="true">07</span>
+        <div><span class="kicker">Results · the ARIMA fit</span><h2>ARIMA: the models we identified, and what the residuals show</h2></div>
+      </header>
+      <div class="cols" style="--cols: 1fr 1.3fr">
+        <div class="reveal">
+          <div class="models" style="grid-template-columns:1fr; margin-top:0">
+            <div class="model"><small>Mortgage rate</small><b>ARIMA(2,1,0)</b>&#981;<sub>1</sub> = 0.090, &#981;<sub>2</sub> = 0.110. Lowest BIC of the candidates tried.</div>
+            <div class="model"><small>Deposits</small><b>ARIMA(6,1,0) + drift</b>Drift = $11.1 billion per week (s.e. 2.1). PACF spikes through lag 6.</div>
+          </div>
+          <ul class="fitnotes">
+            <li>Both series needed one difference (d = 1).</li>
+            <li>Residuals: the shortest lags are clean, but the Ljung-Box test finds some autocorrelation left at longer lags.</li>
+            <li>We kept the models as identified.</li>
+          </ul>
+        </div>
+        <div class="card viewer reveal">
+          <div class="controls">
+            <div class="controls" role="group" aria-label="Series">
+              <button class="btn light" data-vs="mortgage30" aria-pressed="true">Mortgage rate</button>
+              <button class="btn light" data-vs="deposits" aria-pressed="false">Deposits</button>
+            </div>
+            <div class="controls" role="group" aria-label="Plot">
+              <button class="btn light" data-vv="res" aria-pressed="true">Residuals</button>
+              <button class="btn light" data-vv="id" aria-pressed="false">ACF and PACF</button>
+            </div>
+          </div>
+          <img id="vimg" alt="">
+          <p class="cap" id="vcap"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ 07 MATCH 1 ============ -->
   <section id="c7" class="band-dark">
     <div class="wrap">
       <header class="chapter-head reveal">
-        <span class="chapter-num" aria-hidden="true">07</span>
+        <span class="chapter-num" aria-hidden="true">08</span>
         <div><span class="kicker">Match 1 of 2</span><h2>Match 1: the 30-year mortgage rate</h2></div>
       </header>
       <div class="cols match reveal" data-match="mortgage30" data-tail="A narrow win: all three forecasts are within 5% of each other."></div>
@@ -498,7 +534,7 @@
   <section id="c8" class="band-dark grid-bg">
     <div class="wrap">
       <header class="chapter-head reveal">
-        <span class="chapter-num" aria-hidden="true">08</span>
+        <span class="chapter-num" aria-hidden="true">09</span>
         <div><span class="kicker">Match 2 of 2</span><h2>Match 2: commercial bank deposits</h2></div>
       </header>
       <div class="cols match reveal" data-match="deposits" data-tail=""></div>
@@ -509,7 +545,7 @@
   <section id="c9">
     <div class="wrap">
       <header class="chapter-head reveal">
-        <span class="chapter-num" aria-hidden="true">09</span>
+        <span class="chapter-num" aria-hidden="true">10</span>
         <div><span class="kicker">Beyond the score</span><h2>Whose 80% interval can you trust, and how fast does accuracy fade?</h2></div>
       </header>
       <div class="cols" id="beyond">
@@ -536,7 +572,7 @@
   <section id="c10" class="band-dark grid-bg">
     <div class="wrap">
       <header class="chapter-head reveal">
-        <span class="chapter-num" aria-hidden="true">10</span>
+        <span class="chapter-num" aria-hidden="true">11</span>
         <div><span class="kicker">Final verdict</span><h2>Final score: one match each, and the trend decided it</h2></div>
       </header>
       <div class="finals reveal" id="finals"></div>
@@ -561,7 +597,7 @@
   <section id="c11" class="band-tint">
     <div class="wrap">
       <header class="chapter-head reveal">
-        <span class="chapter-num" aria-hidden="true">11</span>
+        <span class="chapter-num" aria-hidden="true">12</span>
         <div><span class="kicker">Sources</span><h2>References</h2></div>
       </header>
       <div class="refs reveal">
