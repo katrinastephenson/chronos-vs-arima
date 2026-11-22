@@ -1,6 +1,6 @@
 # Chronos-2 vs ARIMA on two banking series
 
-Final project for STA 6857 (Time Series), Fall 2026.
+Final project for STA 6857 (Time Series), Fall 2026, by Katrina Stephenson and Som Chavanachat.
 
 Question: can a pretrained forecasting model (Chronos-2), used with no fitting, forecast two weekly banking series as well as ARIMA models identified by hand?
 
